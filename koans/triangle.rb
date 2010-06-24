@@ -14,6 +14,9 @@
 #   about_triangle_project_2.rb
 #
 def triangle(a, b, c)
+  raise TriangleError, "Sides should be positive" if a <= 0 || b <= 0 || c <= 0 
+  raise TriangleError, "Sum of shortest sides should be greater or equal than longest side" unless sides_check(a, b, c)
+  
   if a == b && b == c
     :equilateral
   elsif a == b || a == c || b == c
@@ -21,6 +24,14 @@ def triangle(a, b, c)
   else
     :scalene
   end
+end
+
+def sides_check(a, b, c)
+  sides = [a, b, c].sort
+  longest_side = sides.pop
+  shortest_sum = sides[0] + sides[1]
+  
+  shortest_sum > longest_side
 end
 
 # Error class used in part 2.  No need to change this code.
