@@ -31,6 +31,32 @@ require 'edgecase'
 
 def score(dice)
   # You need to write this method
+  greed_score = 0
+  counts = {}
+  
+  # collect number counts
+  dice.each do |n|
+    counts[n] = 0 unless counts[n]
+    counts[n] = counts[n] + 1
+  end
+  
+  counts.each do |k, v|
+    if v < 3 
+      greed_score += 100 * v if k == 1
+      greed_score += 50 * v if k == 5
+    elsif v == 3
+      greed_score += k * 100
+      greed_score = greed_score * 10 if k == 1
+    else
+      greed_score += k * 100
+      greed_score = greed_score * 10 if k == 1
+      remaining = v - 3
+      greed_score += 100 * remaining if k == 1
+      greed_score += 50 * remaining if k == 5
+    end
+  end
+  
+  greed_score
 end
 
 class AboutScoringAssignment < EdgeCase::Koan
