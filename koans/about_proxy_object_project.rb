@@ -16,9 +16,41 @@ class Proxy
   def initialize(target_object)
     @object = target_object
     # ADD MORE CODE HERE
+    @record = {}
+    @methods_called_in_order = [] # just because order is needed on the tests!
   end
 
   # WRITE CODE HERE
+  def method_missing(method_name, *args, &block)
+    if @object.respond_to?(method_name)
+      record_call(method_name)
+      @object.send(method_name, *args, &block)
+    else
+      super(method_name, *args, &block)
+    end
+  end
+  
+  def called?(method_name)
+    @record.keys.include?(method_name)
+  end
+  
+  def number_of_times_called(method_name)
+    return 0 unless called?(method_name)
+    @record[method_name]
+  end
+  
+  def messages
+    #@record.keys.to_a
+    @methods_called_in_order
+  end
+  
+  protected
+  
+    def record_call(method_name)
+      @record[method_name] = 0 unless @record[method_name]
+      @record[method_name] += 1
+      @methods_called_in_order << method_name
+    end
 end
 
 # The proxy object should pass the following Koan:
